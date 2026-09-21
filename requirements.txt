@@ -1,0 +1,23 @@
+# Fraud-detection streaming pipeline dependencies
+#
+# Only two packages are actually imported by the scripts in this project
+# (train_model.py / stream_consumer.py use pyspark; kafka_producer.py uses
+# confluent_kafka). pandas/pyarrow were previously pinned "just in case"
+# but aren't used anywhere, so they've been dropped.
+
+# Matches the spark-sql-kafka-0-10_2.12:3.5.0 package pulled in by
+# stream_consumer.py's spark.jars.packages config - keep these in sync.
+pyspark==3.5.0
+
+# confluent-kafka wraps librdkafka and ships prebuilt wheels for
+# Windows/macOS/Linux. We intentionally do NOT use kafka-python here - it
+# is unmaintained and fails on Python 3.12+ with:
+#   ModuleNotFoundError: No module named 'kafka.vendor.six.moves'
+confluent-kafka==2.15.0
+
+# pyspark.ml (used by train_model.py/stream_consumer.py) depends on numpy
+# internally. PySpark 3.5.0 has a known incompatibility with NumPy 2.0+
+# (https://issues.apache.org/jira/browse/SPARK-48710), so we pin numpy
+# below 2.0. NumPy 1.26.4 has NO prebuilt wheel for Python 3.13, which is
+# why this project targets Python 3.10-3.12 - see README / launch.ps1.
+numpy==1.26.4

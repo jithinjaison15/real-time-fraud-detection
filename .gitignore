@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+saved_fraud_rf_model/
+_checkpoints/
+*.log
+creditcard.csv
